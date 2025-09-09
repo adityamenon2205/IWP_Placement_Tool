@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           name: "industry",
           type: "select",
-          placeholder: "IT",
+          placeholder: "Choose Industry",
           required: true,
           options: [
             "IT",
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           name: "contactNumber",
           type: "tel",
-          placeholder: "+91 9876543210",
+          placeholder: "9876543210",
           required: true,
         },
         {
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           name: "studentId",
           type: "text",
-          placeholder: "BT2023CSE045",
+          placeholder: "2360312",
           required: true,
         },
         {
@@ -512,27 +512,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function showLoginModal() {
     const loginHtml = `
-      <h3>Login to Your Account</h3>
-      <form onsubmit="handleLogin(event)" style="text-align: left;">
-        <div style="margin: 10px 0;">
-          <label>Email:</label><br>
-          <input type="email" name="email" required style="width: 100%; padding: 8px; margin-top: 5px;">
-        </div>
-        <div style="margin: 10px 0;">
-          <label>Password:</label><br>
-          <input type="password" name="password" required style="width: 100%; padding: 8px; margin-top: 5px;">
-        </div>
-        <div style="margin: 10px 0;">
-          <label>User Type:</label><br>
-          <select name="userType" required style="width: 100%; padding: 8px; margin-top: 5px;">
-            <option value="">Select Type</option>
-            <option value="employer">Employer</option>
-            <option value="candidate">Candidate</option>
-            <option value="faculty">Faculty</option>
-          </select>
-        </div>
-        <button type="submit" style="width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; margin-top: 10px;">Login</button>
-      </form>
+        <h3>Login to Your Account</h3>
+        <p style="color: #666; margin-bottom: 15px;">For testing, use password: 123456</p>
+        <form onsubmit="handleLogin(event)" style="text-align: left;">
+            <div style="margin: 10px 0;">
+                <label>Email:</label><br>
+                <input type="email" name="email" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin: 10px 0;">
+                <label>Password:</label><br>
+                <input type="password" name="password" required style="width: 100%; padding: 8px; margin-top: 5px;">
+            </div>
+            <div style="margin: 10px 0;">
+                <label>User Type:</label><br>
+                <select name="userType" required style="width: 100%; padding: 8px; margin-top: 5px;">
+                    <option value="">Select Type</option>
+                    <option value="employer">Employer</option>
+                    <option value="candidate">Candidate</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+            </div>
+            <button type="submit" style="width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; margin-top: 10px;">Login</button>
+        </form>
     `;
     showModal(loginHtml);
   }
@@ -600,6 +601,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     const formData = new FormData(event.target);
     const email = formData.get("email");
+    const password = formData.get("password"); // We'll use this for basic auth
     const userType = formData.get("userType");
 
     // Check if user exists
@@ -611,11 +613,22 @@ document.addEventListener("DOMContentLoaded", function () {
         u.officialEmail === email
     );
 
-    if (user) {
-      alert(`Welcome back, ${user.fullName}! Login successful.`);
-      document.querySelector(".custom-modal").remove();
+    if (user && password === "123456") {
+      // Basic password check (in real app, use proper auth)
+      // Store current user info
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+          fullName: user.fullName,
+          userType: userType,
+          email: email,
+        })
+      );
+
+      // Redirect to dashboard
+      window.location.href = "dashboard.html";
     } else {
-      alert("User not found. Please register first or check your credentials.");
+      alert("Invalid credentials. Please try again. (Use password: 123456)");
     }
   };
 
